@@ -1,6 +1,8 @@
 package com.almasapp.hw10.almasapp10;
 
 import android.app.Activity;
+import android.content.Context;
+import android.net.ConnectivityManager;
 import android.os.AsyncTask;
 import android.util.Log;
 
@@ -20,6 +22,7 @@ public class MovieListDownloader extends AsyncTask<Void, Void, ArrayList> {
     private final WeakReference<MyRecyclerViewAdapter> adapterWeakReference;
 
     public MovieListDownloader(Activity activity, ArrayList arrayList, MyRecyclerViewAdapter adapter) {
+
         parentWeakReference = new WeakReference<>(activity);
         arrayListWeakReference = new WeakReference<>(arrayList);
         adapterWeakReference = new WeakReference<>(adapter);
@@ -30,8 +33,14 @@ public class MovieListDownloader extends AsyncTask<Void, Void, ArrayList> {
         Log.d(TAG, "doInBackground");
 
         ArrayList<HashMap> arrayList = new ArrayList<>();
+        String data = null;
 
-        String data = HTTPClient.getMovieList("movie");
+        if (checkInternetAccess()) {
+            Log.d(TAG, "Got internet connection");
+            data = HTTPClient.getMovieList();
+        }
+        else
+            Log.d(TAG, "No internet connection");
 
         try {
             if (data != null) {
@@ -78,5 +87,16 @@ public class MovieListDownloader extends AsyncTask<Void, Void, ArrayList> {
             final MyRecyclerViewAdapter adapter = adapterWeakReference.get();
             adapter.notifyDataSetChanged();
         }
+    }
+
+    /**
+     * Check if internet access is available.
+     * @return true if available, false otherwise.
+     */
+    private boolean checkInternetAccess() {
+        final Activity activity = parentWeakReference.get();
+
+        ConnectivityManager cm = (ConnectivityManager) activity.getSystemService(Context.CONNECTIVITY_SERVICE);
+        return (cm.getActiveNetworkInfo() != null);
     }
 }

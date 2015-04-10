@@ -52,7 +52,7 @@ public class MovieDetailDownloader extends AsyncTask<String, Void, HashMap> {
 
         try {
             if (data != null) {
-                JSONObject jsonObject = new JSONObject(data);
+                JSONObject jsonObject = (new JSONArray(data)).getJSONObject(0);
 
                 if (jsonObject != null) {
 
