@@ -27,6 +27,10 @@ public class HTTPClient {
         return downloadJSON(BASE_URL + "id/" + requestString);
     }
 
+    public static String getMoviesAboveRating(double rating) {
+        return downloadJSON(BASE_URL + "rating/" + String.format("%.1g", rating));
+    }
+
     public static String downloadJSON(String url) {
         String json=null, line;
 

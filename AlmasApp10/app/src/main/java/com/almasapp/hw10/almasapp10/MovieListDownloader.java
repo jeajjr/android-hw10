@@ -14,7 +14,7 @@ import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-public class MovieListDownloader extends AsyncTask<Void, Void, ArrayList> {
+public class MovieListDownloader extends AsyncTask<Double, Void, ArrayList> {
     private static final String TAG = "MovieDataDownloader";
 
     private final WeakReference<Activity> parentWeakReference;
@@ -29,7 +29,7 @@ public class MovieListDownloader extends AsyncTask<Void, Void, ArrayList> {
     }
 
     @Override
-    protected ArrayList doInBackground(Void... params) {
+    protected ArrayList doInBackground(Double... params) {
         Log.d(TAG, "doInBackground");
 
         ArrayList<HashMap> arrayList = new ArrayList<>();
@@ -37,7 +37,11 @@ public class MovieListDownloader extends AsyncTask<Void, Void, ArrayList> {
 
         if (checkInternetAccess()) {
             Log.d(TAG, "Got internet connection");
-            data = HTTPClient.getMovieList();
+
+            if (params.length == 0)
+                data = HTTPClient.getMovieList();
+            else
+                data = HTTPClient.getMoviesAboveRating(params[0]);
         }
         else
             Log.d(TAG, "No internet connection");

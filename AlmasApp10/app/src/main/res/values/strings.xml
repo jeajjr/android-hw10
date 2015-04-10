@@ -10,4 +10,6 @@
     <string name="movies_director">Director:</string>
     <string name="movies_stars">Stars:</string>
 
+    <string name="recycler_view_not_found">Movie not found.</string>
+
 </resources>
